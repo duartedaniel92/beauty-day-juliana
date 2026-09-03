@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
 // Cliente com service role — ignora RLS. So pode ser importado em codigo

@@ -31,6 +31,10 @@ export function calculateAvailableSlots(params: {
   const { dateISO, totalDurationMinutes, businessHours, busyIntervals } = params
   const now = params.now ?? new Date()
 
+  if (totalDurationMinutes <= 0) {
+    return []
+  }
+
   // dia da semana calculado em UTC pra ser independente do fuso do servidor
   const dayOfWeek = new Date(`${dateISO}T00:00:00Z`).getUTCDay()
   const hours = businessHours.find((h) => h.dayOfWeek === dayOfWeek)
@@ -39,8 +43,8 @@ export function calculateAvailableSlots(params: {
     return []
   }
 
-  const dayStart = fromZonedTime(`${dateISO}T${hours.startTime}:00`, SALON_TIMEZONE)
-  const dayEnd = fromZonedTime(`${dateISO}T${hours.endTime}:00`, SALON_TIMEZONE)
+  const dayStart = fromZonedTime(`${dateISO}T${normalizeTime(hours.startTime)}`, SALON_TIMEZONE)
+  const dayEnd = fromZonedTime(`${dateISO}T${normalizeTime(hours.endTime)}`, SALON_TIMEZONE)
   const earliestBookable = new Date(now.getTime() + MINIMUM_NOTICE_MINUTES * 60_000)
 
   const slots: Slot[] = []
@@ -63,4 +67,10 @@ export function calculateAvailableSlots(params: {
   }
 
   return slots
+}
+
+// Postgres `time` retorna "HH:mm:ss"; o formato "HH:mm" tambem e aceito
+// (ex: valor digitado direto num teste ou formulario).
+function normalizeTime(time: string): string {
+  return time.length === 5 ? `${time}:00` : time
 }

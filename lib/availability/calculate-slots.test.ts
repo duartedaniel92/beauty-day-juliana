@@ -95,4 +95,40 @@ describe('calculateAvailableSlots', () => {
     )
     expect(forbidden).toBe(false)
   })
+
+  it('retorna vazio se a duracao total for zero ou negativa', () => {
+    const slotsZero = calculateAvailableSlots({
+      dateISO: '2026-09-08',
+      totalDurationMinutes: 0,
+      businessHours: WEEKLY_HOURS,
+      busyIntervals: [],
+      now: EARLY_MORNING,
+    })
+    expect(slotsZero).toEqual([])
+
+    const slotsNegative = calculateAvailableSlots({
+      dateISO: '2026-09-08',
+      totalDurationMinutes: -30,
+      businessHours: WEEKLY_HOURS,
+      busyIntervals: [],
+      now: EARLY_MORNING,
+    })
+    expect(slotsNegative).toEqual([])
+  })
+
+  it('aceita o formato HH:mm:ss que o Postgres retorna pra colunas do tipo time', () => {
+    const hoursWithSeconds: BusinessHours[] = WEEKLY_HOURS.map((h) =>
+      h.startTime && h.endTime
+        ? { ...h, startTime: `${h.startTime}:00`, endTime: `${h.endTime}:00` }
+        : h
+    )
+    const slots = calculateAvailableSlots({
+      dateISO: '2026-09-08',
+      totalDurationMinutes: 60,
+      businessHours: hoursWithSeconds,
+      busyIntervals: [],
+      now: EARLY_MORNING,
+    })
+    expect(slots[0].start.toISOString()).toBe(new Date('2026-09-08T09:00:00-03:00').toISOString())
+  })
 })

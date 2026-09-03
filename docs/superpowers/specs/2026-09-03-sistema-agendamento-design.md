@@ -135,7 +135,9 @@ create table business_hours (
   day_of_week smallint primary key check (day_of_week between 0 and 6),
   start_time time,
   end_time time,
-  is_working boolean not null default true
+  is_working boolean not null default true,
+  constraint working_day_has_hours
+    check (not is_working or (start_time is not null and end_time is not null and end_time > start_time))
 );
 ```
 Só `update`, nunca `insert`/`delete`. Folga pontual (feriado, dia extra) não
@@ -156,7 +158,7 @@ create table appointments (
   constraint client_data_required_for_booking
     check (type = 'block' or (client_name is not null and client_whatsapp is not null and client_email is not null)),
   constraint no_overlap
-    exclude using gist (tsrange(start_time, end_time) with &&)
+    exclude using gist (tstzrange(start_time, end_time) with &&)
 );
 -- requer: create extension if not exists btree_gist;
 ```
@@ -184,14 +186,25 @@ num único lugar (`lib/availability/calculate-slots.ts` e nas Server Actions
 que gravam), pra não espalhar lógica de fuso pelo código.
 
 **RLS (Row Level Security):**
-- `services`, `business_hours`: leitura pública (`anon` + `authenticated`) —
-  catálogo e expediente são informação pública. Escrita só `authenticated`.
-- `appointments`, `appointment_services`: **nenhuma policy pra `anon`** —
-  acesso zero direto do browser. Toda leitura de disponibilidade e toda
-  criação de agendamento passa por Server Action usando a service role key
-  (segredo só de servidor, `lib/supabase/admin.ts`, nunca importado em
-  Client Component). É a Server Action que decide o que expor — o cálculo
-  de horários livres devolve só `{start, end}`, nunca nome de cliente.
+- `services`: leitura pública (`anon`) restrita a `active = true` — serviço
+  desativado não aparece pra quem não está autenticado. `authenticated`
+  recebe policy própria (`for all ... using (true)`) que já cobre a leitura
+  de serviços inativos no painel admin — policies do Postgres são somadas
+  (OR), então a policy `anon` não limita o que `authenticated` enxerga.
+  Escrita só `authenticated`.
+- `business_hours`: leitura pública (`anon` + `authenticated`) — expediente
+  é informação pública. Escrita só `authenticated`.
+- `appointments`, `appointment_services`: **nenhuma policy, pra nenhum
+  papel** — nem `anon` nem `authenticated` têm acesso direto via API do
+  Supabase. RLS fica habilitada só como defesa em profundidade; por
+  desenho, todo acesso a estas duas tabelas (leitura pública de horários
+  ocupados, criação de agendamento, bloqueio manual pela profissional —
+  inclusive as ações do painel admin) passa exclusivamente pela service
+  role key dentro de Server Actions (Plano 2), nunca pelo cliente Supabase
+  autenticado do browser (segredo só de servidor,
+  `lib/supabase/admin.ts`, nunca importado em Client Component). É a
+  Server Action que decide o que expor — o cálculo de horários livres
+  devolve só `{start, end}`, nunca nome de cliente.
 
 ## 5. Motor de disponibilidade — três camadas contra overbooking
 

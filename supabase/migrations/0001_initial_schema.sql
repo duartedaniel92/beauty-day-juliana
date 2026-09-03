@@ -16,7 +16,9 @@ create table business_hours (
   day_of_week smallint primary key check (day_of_week between 0 and 6),
   start_time time,
   end_time time,
-  is_working boolean not null default true
+  is_working boolean not null default true,
+  constraint working_day_has_hours
+    check (not is_working or (start_time is not null and end_time is not null and end_time > start_time))
 );
 
 -- 0=domingo, 1=segunda: fechado. 2=terca a 6=sabado: 09h-18h.
@@ -46,7 +48,7 @@ create table appointments (
       or (client_name is not null and client_whatsapp is not null and client_email is not null)
     ),
   constraint no_overlap
-    exclude using gist (tsrange(start_time, end_time) with &&)
+    exclude using gist (tstzrange(start_time, end_time) with &&)
 );
 
 create table appointment_services (
@@ -63,10 +65,10 @@ alter table business_hours enable row level security;
 alter table appointments enable row level security;
 alter table appointment_services enable row level security;
 
-create policy "services are publicly readable"
+create policy "active services are publicly readable"
   on services for select
-  to anon, authenticated
-  using (true);
+  to anon
+  using (active);
 
 create policy "services are writable by authenticated users"
   on services for all
@@ -85,14 +87,10 @@ create policy "business_hours are writable by authenticated users"
   using (true)
   with check (true);
 
--- appointments e appointment_services: nenhuma policy pra anon.
--- Leitura/escrita publica passa pela service role key em Server Actions (Plano 2).
-create policy "appointments are readable by authenticated users"
-  on appointments for select
-  to authenticated
-  using (true);
-
-create policy "appointment_services are readable by authenticated users"
-  on appointment_services for select
-  to authenticated
-  using (true);
+-- appointments e appointment_services: nenhuma policy, pra nenhum papel.
+-- RLS habilitada aqui e so como defesa em profundidade: por desenho, todo
+-- acesso a estas duas tabelas (leitura publica de horarios ocupados, criacao
+-- de agendamento, bloqueio manual pela profissional) passa exclusivamente
+-- pela service role key dentro de Server Actions (Plano 2) -- inclusive as
+-- acoes do painel admin. Nenhum papel do Postgres (anon nem authenticated)
+-- tem acesso direto a estas duas tabelas.
