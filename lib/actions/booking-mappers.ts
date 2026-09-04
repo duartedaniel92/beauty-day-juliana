@@ -27,3 +27,32 @@ export function mapAppointmentRows(rows: AppointmentRow[]): BusyInterval[] {
     end: new Date(row.end_time),
   }))
 }
+
+interface ServiceRow {
+  id: string
+  name: string
+  price_cents: number
+  duration_minutes: number
+}
+
+export interface ServiceSnapshot {
+  service_id: string
+  service_name_snapshot: string
+  price_cents_snapshot: number
+  duration_minutes_snapshot: number
+}
+
+export function buildServiceSnapshots(services: ServiceRow[], serviceIds: string[]): ServiceSnapshot[] {
+  return serviceIds.map((id) => {
+    const service = services.find((s) => s.id === id)
+    if (!service) {
+      throw new Error(`Servico ${id} nao encontrado entre os servicos carregados.`)
+    }
+    return {
+      service_id: service.id,
+      service_name_snapshot: service.name,
+      price_cents_snapshot: service.price_cents,
+      duration_minutes_snapshot: service.duration_minutes,
+    }
+  })
+}
