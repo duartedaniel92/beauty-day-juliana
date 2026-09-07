@@ -65,4 +65,21 @@ describe('getAvailableSlotsInputSchema', () => {
     })
     expect(result.success).toBe(false)
   })
+
+  it('rejeita data com dia ou mes impossivel no calendario', () => {
+    const result = getAvailableSlotsInputSchema.safeParse({
+      serviceIds: ['550e8400-e29b-41d4-a716-446655440000'],
+      dateISO: '2026-13-45',
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejeita mais de 20 servicos selecionados', () => {
+    const tooMany = Array.from({ length: 21 }, () => '550e8400-e29b-41d4-a716-446655440000')
+    const result = getAvailableSlotsInputSchema.safeParse({
+      serviceIds: tooMany,
+      dateISO: '2026-09-10',
+    })
+    expect(result.success).toBe(false)
+  })
 })

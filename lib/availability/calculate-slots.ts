@@ -1,6 +1,6 @@
 import { fromZonedTime } from 'date-fns-tz'
 
-const SALON_TIMEZONE = 'America/Sao_Paulo'
+export const SALON_TIMEZONE = 'America/Sao_Paulo'
 const MINIMUM_NOTICE_MINUTES = 120
 const SLOT_STEP_MINUTES = 15
 
