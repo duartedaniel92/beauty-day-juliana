@@ -12,19 +12,24 @@ interface ServiceTeaser {
 
 export default async function HomePage() {
   const supabase = await createClient();
-  const { data: services } = await supabase
+  const { data: services, error } = await supabase
     .from("services")
     .select("id, name, price_cents, duration_minutes")
     .eq("active", true)
     .order("duration_minutes", { ascending: true });
 
+  if (error) {
+    throw new Error(`Falha ao carregar servicos: ${error.message}`);
+  }
+
   const featuredServices = (services ?? []) as ServiceTeaser[];
 
   return (
     <>
-      <section className="bg-ink text-cream">
-        <div className="mx-auto flex max-w-5xl flex-col gap-10 px-6 py-16 md:flex-row md:items-center md:py-24">
-          <div className="relative aspect-[3/4] w-full max-w-sm overflow-hidden rounded-sm md:w-2/5">
+      <main>
+        <section className="bg-ink text-cream">
+        <div className="mx-auto flex max-w-5xl flex-col gap-10 px-6 py-10 md:flex-row md:items-center md:py-24">
+          <div className="relative h-[40vh] w-full max-w-sm overflow-hidden rounded-sm md:aspect-[3/4] md:h-auto md:w-2/5">
             <Image
               src="/images/Juliana_2.jpg"
               alt="Juliana, profissional do Beauty Day"
@@ -89,6 +94,7 @@ export default async function HomePage() {
           </ul>
         </section>
       )}
+      </main>
 
       <footer className="border-t border-sand/60 px-6 py-10">
         <div className="mx-auto flex max-w-3xl flex-col gap-2 font-sans text-sm text-ink-soft">

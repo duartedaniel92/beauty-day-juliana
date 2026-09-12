@@ -19,10 +19,12 @@ test.describe("fluxo de agendamento", () => {
   test.afterEach(async () => {
     const supabase = createTestCleanupClient();
     if (createdAppointmentId) {
-      await supabase.from("appointments").delete().eq("id", createdAppointmentId);
+      const { error } = await supabase.from("appointments").delete().eq("id", createdAppointmentId);
+      expect(error).toBeNull();
     }
     if (testEmail) {
-      await supabase.from("appointments").delete().eq("client_email", testEmail);
+      const { error } = await supabase.from("appointments").delete().eq("client_email", testEmail);
+      expect(error).toBeNull();
     }
     createdAppointmentId = undefined;
     testEmail = undefined;

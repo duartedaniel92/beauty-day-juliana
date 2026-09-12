@@ -3,11 +3,15 @@ import { BookingWizard } from "@/components/booking/BookingWizard";
 
 export default async function AgendarPage() {
   const supabase = await createClient();
-  const { data: services } = await supabase
+  const { data: services, error } = await supabase
     .from("services")
     .select("id, name, price_cents, duration_minutes")
     .eq("active", true)
     .order("duration_minutes", { ascending: true });
+
+  if (error) {
+    throw new Error(`Falha ao carregar servicos: ${error.message}`);
+  }
 
   if (!services || services.length === 0) {
     return (

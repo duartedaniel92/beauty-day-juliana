@@ -91,7 +91,7 @@ export function ContactForm({ selectedServices, slot, onBack }: ContactFormProps
           required
           value={clientName}
           onChange={(event) => setClientName(event.target.value)}
-          className="rounded-sm border border-sand bg-cream px-3 py-2 text-ink"
+          className="rounded-sm border border-ink-soft/60 bg-cream px-3 py-2 text-ink outline-none focus-visible:border-clay focus-visible:ring-2 focus-visible:ring-clay/40"
         />
       </label>
 
@@ -103,7 +103,7 @@ export function ContactForm({ selectedServices, slot, onBack }: ContactFormProps
           placeholder="(11) 90000-0000"
           value={clientWhatsapp}
           onChange={(event) => setClientWhatsapp(event.target.value)}
-          className="rounded-sm border border-sand bg-cream px-3 py-2 text-ink"
+          className="rounded-sm border border-ink-soft/60 bg-cream px-3 py-2 text-ink outline-none focus-visible:border-clay focus-visible:ring-2 focus-visible:ring-clay/40"
         />
       </label>
 
@@ -114,7 +114,7 @@ export function ContactForm({ selectedServices, slot, onBack }: ContactFormProps
           required
           value={clientEmail}
           onChange={(event) => setClientEmail(event.target.value)}
-          className="rounded-sm border border-sand bg-cream px-3 py-2 text-ink"
+          className="rounded-sm border border-ink-soft/60 bg-cream px-3 py-2 text-ink outline-none focus-visible:border-clay focus-visible:ring-2 focus-visible:ring-clay/40"
         />
       </label>
 

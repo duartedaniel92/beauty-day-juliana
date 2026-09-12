@@ -75,7 +75,7 @@ export async function getAvailableSlots(input: { serviceIds: string[]; dateISO: 
 export async function createBooking(input: unknown): Promise<{ id: string } | { error: string }> {
   const parsed = bookingInputSchema.safeParse(input)
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? 'Dados invalidos.' }
+    return { error: parsed.error.issues[0]?.message ?? 'Dados inválidos.' }
   }
   const { serviceIds, clientName, clientWhatsapp, clientEmail, startTime } = parsed.data
 
@@ -87,12 +87,12 @@ export async function createBooking(input: unknown): Promise<{ id: string } | { 
   const { slots: availableSlots, services: serviceRows } = await computeAvailableSlots(supabase, serviceIds, dateISO)
 
   if (serviceRows.length !== serviceIds.length) {
-    return { error: 'Um ou mais servicos selecionados nao estao mais disponiveis.' }
+    return { error: 'Um ou mais serviços selecionados não estão mais disponíveis.' }
   }
 
   const isStillAvailable = availableSlots.some((slot) => slot.start.getTime() === startTime.getTime())
   if (!isStillAvailable) {
-    return { error: 'Esse horario acabou de ficar indisponivel. Escolha outro horario.' }
+    return { error: 'Esse horário acabou de ficar indisponível. Escolha outro horário.' }
   }
 
   const totalDurationMinutes = serviceRows.reduce((sum, service) => sum + service.duration_minutes, 0)
@@ -118,7 +118,7 @@ export async function createBooking(input: unknown): Promise<{ id: string } | { 
   if (appointmentError || !appointment) {
     // a exclusion constraint do banco (Plano 1) e a ultima linha de defesa
     // contra corrida -- se cair aqui, provavelmente foi ela que barrou
-    return { error: 'Nao foi possivel confirmar o agendamento. Tente novamente.' }
+    return { error: 'Não foi possível confirmar o agendamento. Tente novamente.' }
   }
 
   const { error: snapshotError } = await supabase
@@ -133,7 +133,7 @@ export async function createBooking(input: unknown): Promise<{ id: string } | { 
         `Falha ao limpar agendamento orfao ${appointment.id} apos erro de snapshot: ${deleteError.message}`
       )
     }
-    return { error: 'Nao foi possivel confirmar o agendamento. Tente novamente.' }
+    return { error: 'Não foi possível confirmar o agendamento. Tente novamente.' }
   }
 
   return { id: appointment.id }

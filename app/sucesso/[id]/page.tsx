@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { formatPrice } from "@/lib/format";
 import { formatInTimeZone } from "date-fns-tz";
 import { AddToGoogleCalendar } from "@/components/booking/AddToGoogleCalendar";
-
-const SALON_TIMEZONE = "America/Sao_Paulo";
+import { SALON_TIMEZONE } from "@/lib/availability/calculate-slots";
 
 export default async function SucessoPage({
   params,
@@ -14,7 +14,7 @@ export default async function SucessoPage({
   const { id } = await params;
   const supabase = createAdminClient();
 
-  const { data: appointment } = await supabase
+  const { data: appointment, error } = await supabase
     .from("appointments")
     .select(
       "id, start_time, end_time, appointment_services(service_name_snapshot, price_cents_snapshot)"
@@ -22,6 +22,12 @@ export default async function SucessoPage({
     .eq("id", id)
     .eq("type", "booking")
     .single();
+
+  // PGRST116 = .single() nao encontrou linha: e um 404 legitimo.
+  // Qualquer outro erro e falha de infraestrutura e deve subir pro error boundary.
+  if (error && error.code !== "PGRST116") {
+    throw new Error(`Falha ao carregar agendamento: ${error.message}`);
+  }
 
   if (!appointment) {
     notFound();
@@ -63,6 +69,9 @@ export default async function SucessoPage({
         startISO={appointment.start_time}
         endISO={appointment.end_time}
       />
+      <Link href="/" className="w-fit font-sans text-sm text-ink-soft underline">
+        Voltar ao início
+      </Link>
     </main>
   );
 }

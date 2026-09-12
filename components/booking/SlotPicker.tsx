@@ -52,6 +52,7 @@ export function SlotPicker({
   // O estado de carregamento e derivado no render comparando a chave da
   // resposta guardada com a chave atual.
   useEffect(() => {
+    if (!dateISO) return;
     let cancelled = false;
     const currentKey = requestKey(serviceIds, dateISO);
 
@@ -81,7 +82,7 @@ export function SlotPicker({
 
   const slots = result?.key === key ? result.slots : null;
   const errorMessage = slots === null && error?.key === key ? error.message : null;
-  const isLoading = slots === null && errorMessage === null;
+  const isLoading = dateISO !== "" && slots === null && errorMessage === null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -97,7 +98,7 @@ export function SlotPicker({
           min={todayISO()}
           value={dateISO}
           onChange={(event) => setDateISO(event.target.value)}
-          className="rounded-sm border border-sand bg-cream px-3 py-2 text-ink"
+          className="rounded-sm border border-ink-soft/60 bg-cream px-3 py-2 text-ink outline-none focus-visible:border-clay focus-visible:ring-2 focus-visible:ring-clay/40"
         />
       </label>
 
