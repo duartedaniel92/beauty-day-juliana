@@ -58,7 +58,7 @@ test.describe("fluxo de agendamento", () => {
     await page.getByLabel("Data").fill(nextWorkingDayISO());
 
     const firstSlotButton = page.getByRole("button", { name: /^\d{2}:\d{2}$/ }).first();
-    await expect(firstSlotButton).toBeVisible({ timeout: 10_000 });
+    await expect(firstSlotButton).toBeVisible();
     await firstSlotButton.click();
 
     testEmail = `teste-e2e-${Date.now()}@example.com`;
@@ -67,7 +67,7 @@ test.describe("fluxo de agendamento", () => {
     await page.getByLabel("E-mail").fill(testEmail);
     await page.getByRole("button", { name: "Confirmar agendamento" }).click();
 
-    await expect(page).toHaveURL(/\/sucesso\/.+/, { timeout: 10_000 });
+    await expect(page).toHaveURL(/\/sucesso\/.+/);
     createdAppointmentId = page.url().split("/sucesso/")[1];
 
     await expect(
