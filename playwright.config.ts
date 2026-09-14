@@ -15,6 +15,8 @@ export default defineConfig({
     command: "npm run dev",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
+    // A primeira compilacao de "/" pelo Turbopack a frio passou de 40s nesta
+    // maquina; 60s estourou no merge. 120s da folga sem mascarar um travamento.
+    timeout: 120_000,
   },
 });

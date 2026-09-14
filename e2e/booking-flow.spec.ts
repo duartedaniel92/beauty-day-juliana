@@ -12,6 +12,21 @@ function createTestCleanupClient() {
   );
 }
 
+// Proximo dia util do salao a partir de amanha (fechado domingo e segunda,
+// conforme o seed de business_hours). Nunca usa "hoje": alem da folga, no
+// fim do dia a antecedencia minima de 2h pode deixar hoje sem horario.
+function nextWorkingDayISO(): string {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  while (date.getDay() === 0 || date.getDay() === 1) {
+    date.setDate(date.getDate() + 1);
+  }
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 test.describe("fluxo de agendamento", () => {
   let createdAppointmentId: string | undefined;
   let testEmail: string | undefined;
@@ -39,6 +54,8 @@ test.describe("fluxo de agendamento", () => {
 
     await page.getByRole("checkbox").first().check();
     await page.getByRole("button", { name: "Continuar" }).click();
+
+    await page.getByLabel("Data").fill(nextWorkingDayISO());
 
     const firstSlotButton = page.getByRole("button", { name: /^\d{2}:\d{2}$/ }).first();
     await expect(firstSlotButton).toBeVisible({ timeout: 10_000 });
