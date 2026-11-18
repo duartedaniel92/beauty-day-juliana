@@ -24,7 +24,7 @@ Próximo passo: conferir editor, upload e refresh com login real quando a propri
 
 18/11/2026: usuário escolheu link wa.me em vez da API oficial para avisar a cliente; projeto serve para uso real da Juliana e para portfólio. Adicionados lib/whatsapp-message.ts (+ teste) e botão no detalhe da reserva (EntryDetails). Sem commit/publicação. Próximos: commit, suíte completa/lint/build, conferência com login real, README de portfólio com conta demo.
 
-18/11/2026 (2): commit 396e154 em feat/painel-admin inclui todo o trabalho desde 775fa8e; build local gerou BUILD_ID às 19:55. Repositório sem remote: push não ocorreu e não existe repo no GitHub. Produção fora do ar: Supabase dncuvkrwvrqxdltsympy com status INACTIVE (pausa do plano gratuito por inatividade); restauração pendente de autorização. README reescrito para portfólio; README técnico movido para docs/DESENVOLVIMENTO.md.
+18/11/2026 (2): commit 396e154 em feat/painel-admin inclui todo o trabalho desde 775fa8e; build local gerou BUILD_ID às 19:55. Repositório sem remote: push não ocorreu e não existe repo no GitHub. Produção fora do ar: Supabase dncuvkrwvrqxdltsympy com status INACTIVE (pausa do plano gratuito por inatividade); restaurado no mesmo dia com autorização do usuário (ACTIVE_HEALTHY; home e /agendar conferidos, nenhum pedido enviado). Plano gratuito pode pausar de novo após inatividade. README reescrito para portfólio; README técnico movido para docs/DESENVOLVIMENTO.md.
 
 Histórico arquivado: [MEMORY-anterior](reviews/2026-10-07-finalizacao/MEMORY-anterior.md). Execução atual: [TASKS](TASKS.md). Revisão item a item: [SEGURANCA](reviews/2026-10-07-finalizacao/SEGURANCA.md).
 

@@ -17,6 +17,14 @@ Combinar horário por mensagem exige, a cada pedido, descobrir quais serviços a
 2. Vê só os horários em que o atendimento inteiro cabe, dentro do expediente e com pelo menos 2 h de antecedência.
 3. Envia o pedido e recebe um comprovante dizendo que ele está **aguardando confirmação**.
 
+<p>
+  <img src="docs/images/agendar-1-servicos.png" alt="Passo 1: escolha de serviços com duração somada" width="260">
+  <img src="docs/images/agendar-2-horarios.png" alt="Passo 2: horários livres para um atendimento de 85 minutos" width="260">
+  <img src="docs/images/agendar-3-dados.png" alt="Passo 3: resumo com serviços, horário e total" width="260">
+</p>
+
+Escova + corte somam 85 min. O último horário oferecido é 16:30, porque o atendimento inteiro precisa terminar dentro do expediente.
+
 **Proprietária (painel em `/painel`)**
 - Agenda por dia, semana ou mês, com bloqueios de horário.
 - Aprova, reagenda, recusa ou cancela pedidos. Pedidos feitos no expediente expiram em 120 min sem resposta.
