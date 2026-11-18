@@ -47,3 +47,5 @@ next-env.d.ts
 
 # claude code (nested worktrees, local settings)
 .claude/
+supabase/.temp/
+.claude-flow/

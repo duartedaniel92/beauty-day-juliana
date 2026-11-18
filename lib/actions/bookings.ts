@@ -1,23 +1,23 @@
 'use server'
 
-import { fromZonedTime, formatInTimeZone } from 'date-fns-tz'
+import { fromZonedTime } from 'date-fns-tz'
+import { addDays } from '../calendar'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { calculateAvailableSlots, SALON_TIMEZONE, type Slot } from '@/lib/availability/calculate-slots'
 import { getAvailableSlotsInputSchema, bookingInputSchema } from '@/lib/validation/booking'
-import { mapAppointmentRows, mapBusinessHoursRows, buildServiceSnapshots } from './booking-mappers'
+import { mapAppointmentRows, mapBusinessHoursRows } from './booking-mappers'
+import { bookingApprovalEnabled } from '../booking-feature'
+import { cookies } from 'next/headers'
+import { addBookingReceipt, BOOKING_RECEIPT_COOKIE, RECEIPT_TTL, securityHash } from '../security/booking-access'
+import { sessionCookieOptions, BOOKING_CLIENT_COOKIE } from '../security/cookies'
+import { enforceRateLimit, RateLimitError } from '../security/rate-limit'
 
-interface ComputeResult {
-  slots: Slot[]
-  services: { id: string; name: string; price_cents: number; duration_minutes: number }[]
-}
-
-// helper compartilhado pelas duas actions -- nao exportado de proposito:
-// um arquivo 'use server' expoe cada export como endpoint HTTP publico
-async function computeAvailableSlots(
-  supabase: ReturnType<typeof createAdminClient>,
-  serviceIds: string[],
-  dateISO: string
-): Promise<ComputeResult> {
+export async function getAvailableSlots(input: { serviceIds: string[]; dateISO: string }): Promise<Slot[]> {
+  const parsed = getAvailableSlotsInputSchema.safeParse(input)
+  if (!parsed.success || parsed.data.serviceIds.length === 0) return []
+  const { serviceIds, dateISO } = parsed.data
+  await enforceRateLimit('slots')
+  const supabase = createAdminClient()
   const { data: serviceRows, error: servicesError } = await supabase
     .from('services')
     .select('id, name, price_cents, duration_minutes')
@@ -25,116 +25,75 @@ async function computeAvailableSlots(
     .eq('active', true)
 
   if (servicesError) {
-    throw new Error(`Falha ao buscar servicos: ${servicesError.message}`)
+    throw new Error('Não foi possível consultar os serviços agora.')
   }
   if (!serviceRows || serviceRows.length !== serviceIds.length) {
-    return { slots: [], services: serviceRows ?? [] }
+    return []
   }
 
   const totalDurationMinutes = serviceRows.reduce((sum, service) => sum + service.duration_minutes, 0)
 
   const dayStart = fromZonedTime(`${dateISO}T00:00:00`, SALON_TIMEZONE)
-  const dayEnd = fromZonedTime(`${dateISO}T23:59:59`, SALON_TIMEZONE)
+  const dayEnd = fromZonedTime(`${addDays(dateISO, 1)}T00:00:00`, SALON_TIMEZONE)
 
+  let busyQuery = supabase.from('appointments').select('start_time, end_time').lt('start_time', dayEnd.toISOString()).gt('end_time', dayStart.toISOString())
+  if (bookingApprovalEnabled()) busyQuery = busyQuery.in('status', ['pending', 'confirmed']).or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
   const [{ data: businessHoursRows, error: hoursError }, { data: appointmentRows, error: appointmentsError }] =
     await Promise.all([
       supabase.from('business_hours').select('day_of_week, start_time, end_time, is_working'),
-      supabase
-        .from('appointments')
-        .select('start_time, end_time')
-        .lt('start_time', dayEnd.toISOString())
-        .gt('end_time', dayStart.toISOString()),
+      busyQuery,
     ])
 
   if (hoursError) {
-    throw new Error(`Falha ao buscar expediente: ${hoursError.message}`)
+    throw new Error('Não foi possível consultar o expediente agora.')
   }
   if (appointmentsError) {
-    throw new Error(`Falha ao buscar agendamentos: ${appointmentsError.message}`)
+    throw new Error('Não foi possível consultar os horários agora.')
   }
 
-  const slots = calculateAvailableSlots({
+  return calculateAvailableSlots({
     dateISO,
     totalDurationMinutes,
     businessHours: mapBusinessHoursRows(businessHoursRows ?? []),
     busyIntervals: mapAppointmentRows(appointmentRows ?? []),
   })
 
-  return { slots, services: serviceRows }
 }
 
-export async function getAvailableSlots(input: { serviceIds: string[]; dateISO: string }): Promise<Slot[]> {
-  const parsed = getAvailableSlotsInputSchema.safeParse(input)
-  if (!parsed.success || parsed.data.serviceIds.length === 0) {
-    return []
-  }
-  const { slots } = await computeAvailableSlots(createAdminClient(), parsed.data.serviceIds, parsed.data.dateISO)
-  return slots
-}
-
-export async function createBooking(input: unknown): Promise<{ id: string } | { error: string }> {
+export async function createBooking(input: unknown): Promise<{ id: string } | { error: string; refreshServices?: boolean }> {
   const parsed = bookingInputSchema.safeParse(input)
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? 'Dados inválidos.' }
   }
-  const { serviceIds, clientName, clientWhatsapp, clientEmail, startTime } = parsed.data
+  const { serviceIds, clientName, clientWhatsapp, clientEmail, startTime, requestId, expectedServices } = parsed.data
+  const store = await cookies()
+  const browser = store.get(BOOKING_CLIENT_COOKIE)?.value
+  if (!browser || !/^[a-f0-9]{64}$/.test(browser)) return { error:'Sua sessão de agendamento expirou. Atualize a página.', refreshServices:true }
+  try { await enforceRateLimit('booking', clientWhatsapp) }
+  catch (error) { return { error: error instanceof RateLimitError ? error.message : 'Não foi possível enviar o pedido agora. Tente novamente mais tarde.' } }
 
-  const supabase = createAdminClient()
-  const dateISO = formatInTimeZone(startTime, SALON_TIMEZONE, 'yyyy-MM-dd')
-
-  // revalida a disponibilidade com dados frescos -- nao confia no que o
-  // client mandou, mesmo que o client ja tenha feito essa checagem antes
-  const { slots: availableSlots, services: serviceRows } = await computeAvailableSlots(supabase, serviceIds, dateISO)
-
-  if (serviceRows.length !== serviceIds.length) {
-    return { error: 'Um ou mais serviços selecionados não estão mais disponíveis.' }
+  // A RPC valida novamente sob lock e grava reserva + snapshots na mesma transação.
+  const quote = [...expectedServices].sort((a,b) => a.id.localeCompare(b.id))
+  const { data: id, error } = await createAdminClient().rpc('submit_appointment', {
+    p_request_key: securityHash('request', `${browser}:${requestId}`),
+    p_fingerprint: securityHash('request-content', JSON.stringify({ serviceIds:[...serviceIds].sort(), clientName, clientWhatsapp, clientEmail, startTime:startTime.toISOString(), quote })),
+    p_expected_services: quote,
+    p_pending: bookingApprovalEnabled(),
+    p_service_ids: serviceIds,
+    p_start_time: startTime.toISOString(),
+    p_client_name: clientName,
+    p_client_whatsapp: clientWhatsapp,
+    p_client_email: clientEmail,
+  })
+  if (error) {
+    if (error.code === 'BD001') return { error:'O preço ou a duração de um serviço mudou. Atualize a seleção antes de enviar.', refreshServices:true }
+    if (error.code === '23P01') return { error: 'Esse horário acabou de ficar indisponível. Escolha outro horário.' }
+    if (error.code === '22023') return { error: 'Serviço ou horário indisponível. Confira a seleção e tente novamente.' }
+    throw new Error('Não foi possível confirmar o agendamento agora.')
   }
-
-  const isStillAvailable = availableSlots.some((slot) => slot.start.getTime() === startTime.getTime())
-  if (!isStillAvailable) {
-    return { error: 'Esse horário acabou de ficar indisponível. Escolha outro horário.' }
-  }
-
-  const totalDurationMinutes = serviceRows.reduce((sum, service) => sum + service.duration_minutes, 0)
-  const endTime = new Date(startTime.getTime() + totalDurationMinutes * 60_000)
-
-  // monta os snapshots ANTES de gravar o agendamento -- se algo aqui falhar
-  // (servico nao encontrado na lista carregada), nao sobra registro parcial
-  const snapshots = buildServiceSnapshots(serviceRows, serviceIds)
-
-  const { data: appointment, error: appointmentError } = await supabase
-    .from('appointments')
-    .insert({
-      type: 'booking',
-      client_name: clientName,
-      client_whatsapp: clientWhatsapp,
-      client_email: clientEmail,
-      start_time: startTime.toISOString(),
-      end_time: endTime.toISOString(),
-    })
-    .select('id')
-    .single()
-
-  if (appointmentError || !appointment) {
-    // a exclusion constraint do banco (Plano 1) e a ultima linha de defesa
-    // contra corrida -- se cair aqui, provavelmente foi ela que barrou
-    return { error: 'Não foi possível confirmar o agendamento. Tente novamente.' }
-  }
-
-  const { error: snapshotError } = await supabase
-    .from('appointment_services')
-    .insert(snapshots.map((snapshot) => ({ ...snapshot, appointment_id: appointment.id })))
-
-  if (snapshotError) {
-    // compensa a insercao parcial -- sem isso o agendamento fica "fantasma"
-    const { error: deleteError } = await supabase.from('appointments').delete().eq('id', appointment.id)
-    if (deleteError) {
-      throw new Error(
-        `Falha ao limpar agendamento orfao ${appointment.id} apos erro de snapshot: ${deleteError.message}`
-      )
-    }
-    return { error: 'Não foi possível confirmar o agendamento. Tente novamente.' }
-  }
-
-  return { id: appointment.id }
+  if (!id) throw new Error('A reserva não retornou uma confirmação.')
+  store.set(BOOKING_RECEIPT_COOKIE, addBookingReceipt(store.get(BOOKING_RECEIPT_COOKIE)?.value, id), {
+    ...sessionCookieOptions(), maxAge: RECEIPT_TTL,
+  })
+  return { id }
 }

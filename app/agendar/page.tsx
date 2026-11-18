@@ -1,17 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
+import { getPublicServices } from "@/lib/public-services";
 import { BookingWizard } from "@/components/booking/BookingWizard";
+import { PublicHeader } from "@/components/public/PublicHeader";
 
 export default async function AgendarPage() {
-  const supabase = await createClient();
-  const { data: services, error } = await supabase
-    .from("services")
-    .select("id, name, price_cents, duration_minutes")
-    .eq("active", true)
-    .order("duration_minutes", { ascending: true });
-
-  if (error) {
-    throw new Error(`Falha ao carregar servicos: ${error.message}`);
-  }
+  const services = await getPublicServices();
 
   if (!services || services.length === 0) {
     return (
@@ -24,8 +16,8 @@ export default async function AgendarPage() {
   }
 
   return (
-    <main className="min-h-screen">
+    <div className="booking-surface"><PublicHeader /><main className="min-h-[75vh]">
       <BookingWizard services={services} />
-    </main>
+    </main></div>
   );
 }

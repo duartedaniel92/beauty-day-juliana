@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { bookingInputSchema, getAvailableSlotsInputSchema } from './booking'
 
 const validInput = {
+  requestId:'11111111-1111-4111-8111-111111111111',
+  expectedServices:[{ id:'550e8400-e29b-41d4-a716-446655440000', priceCents:8000, durationMinutes:45 }],
   serviceIds: ['550e8400-e29b-41d4-a716-446655440000'],
   clientName: 'Maria Silva',
   clientWhatsapp: '(11) 98888-7777',
@@ -10,6 +12,11 @@ const validInput = {
 }
 
 describe('bookingInputSchema', () => {
+  it('recusa contato excessivo antes da normalização e cotação de serviço diferente', () => {
+    expect(bookingInputSchema.safeParse({ ...validInput, clientWhatsapp:' '.repeat(5000)+'11999999999' }).success).toBe(false)
+    expect(bookingInputSchema.safeParse({ ...validInput, expectedServices:[] }).success).toBe(false)
+    expect(bookingInputSchema.safeParse({ ...validInput, requestId:'invalid' }).success).toBe(false)
+  })
   it('aceita um input valido', () => {
     const result = bookingInputSchema.safeParse(validInput)
     expect(result.success).toBe(true)

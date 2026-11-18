@@ -4,13 +4,9 @@ import { useState } from "react";
 import { ServiceSelector } from "./ServiceSelector";
 import { SlotPicker } from "./SlotPicker";
 import { ContactForm } from "./ContactForm";
+import type { PublicService } from "@/lib/public-services";
 
-export interface WizardService {
-  id: string;
-  name: string;
-  price_cents: number;
-  duration_minutes: number;
-}
+export type WizardService = PublicService;
 
 interface Slot {
   start: string;
@@ -52,6 +48,7 @@ export function BookingWizard({ services }: { services: WizardService[] }) {
         <ServiceSelector
           services={services}
           selectedServiceIds={selectedServiceIds}
+          totalDurationMinutes={totalDurationMinutes}
           onToggle={toggleService}
           onContinue={() => setStep("horario")}
         />

@@ -1,7 +1,9 @@
 import { defineConfig } from "@playwright/test";
 import { config } from "dotenv";
+import { assertE2EEnvironment } from "./lib/security/e2e-environment";
 
 config({ path: ".env.local" });
+assertE2EEnvironment();
 
 export default defineConfig({
   testDir: "./e2e",

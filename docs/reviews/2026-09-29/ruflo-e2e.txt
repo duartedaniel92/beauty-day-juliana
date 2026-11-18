@@ -1,0 +1,51 @@
+
+Code Analysis
+--------------------------------------------------
+{
+  "type": "quality",
+  "path": "C:\\dev\\portfolio\\beauty-day-juliana\\e2e",
+  "files": 4,
+  "totalLoc": 138,
+  "totalTodos": 0,
+  "totalFunctions": 1,
+  "totalImports": 11,
+  "avgFileSize": 35,
+  "fileStats": [
+    {
+      "relativePath": "booking-flow.spec.ts",
+      "loc": 55,
+      "todos": 0,
+      "functions": 1,
+      "imports": 3,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "booking-race.spec.ts",
+      "loc": 42,
+      "todos": 0,
+      "functions": 0,
+      "imports": 6,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "password-recovery.spec.ts",
+      "loc": 16,
+      "todos": 0,
+      "functions": 0,
+      "imports": 1,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "public-layout.spec.ts",
+      "loc": 25,
+      "todos": 0,
+      "functions": 0,
+      "imports": 1,
+      "maxNesting": 2,
+      "securityIssues": []
+    }
+  ]
+}

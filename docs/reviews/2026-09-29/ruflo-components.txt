@@ -1,0 +1,195 @@
+
+Code Analysis
+--------------------------------------------------
+{
+  "type": "quality",
+  "path": "C:\\dev\\portfolio\\beauty-day-juliana\\components",
+  "files": 20,
+  "totalLoc": 714,
+  "totalTodos": 1,
+  "totalFunctions": 31,
+  "totalImports": 71,
+  "avgFileSize": 36,
+  "fileStats": [
+    {
+      "relativePath": "admin\\AdminNav.tsx",
+      "loc": 12,
+      "todos": 0,
+      "functions": 1,
+      "imports": 4,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\BlockForm.tsx",
+      "loc": 40,
+      "todos": 0,
+      "functions": 2,
+      "imports": 6,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\BusinessHoursForm.tsx",
+      "loc": 23,
+      "todos": 0,
+      "functions": 2,
+      "imports": 5,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\Calendar.tsx",
+      "loc": 40,
+      "todos": 0,
+      "functions": 4,
+      "imports": 5,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\CalendarToolbar.tsx",
+      "loc": 10,
+      "todos": 0,
+      "functions": 1,
+      "imports": 4,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\Dialog.tsx",
+      "loc": 28,
+      "todos": 0,
+      "functions": 1,
+      "imports": 2,
+      "maxNesting": 5,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\EntryDetails.tsx",
+      "loc": 22,
+      "todos": 0,
+      "functions": 1,
+      "imports": 7,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\ServiceForm.tsx",
+      "loc": 34,
+      "todos": 0,
+      "functions": 2,
+      "imports": 6,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\ServiceStatus.tsx",
+      "loc": 11,
+      "todos": 0,
+      "functions": 1,
+      "imports": 4,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\styles.ts",
+      "loc": 3,
+      "todos": 0,
+      "functions": 0,
+      "imports": 0,
+      "maxNesting": 0,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin\\useMutation.ts",
+      "loc": 23,
+      "todos": 0,
+      "functions": 2,
+      "imports": 3,
+      "maxNesting": 4,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "auth\\LogoutForm.tsx",
+      "loc": 5,
+      "todos": 0,
+      "functions": 1,
+      "imports": 2,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "auth\\SubmitButton.tsx",
+      "loc": 14,
+      "todos": 0,
+      "functions": 1,
+      "imports": 1,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "booking\\AddToGoogleCalendar.tsx",
+      "loc": 31,
+      "todos": 0,
+      "functions": 2,
+      "imports": 0,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "booking\\BookingWizard.tsx",
+      "loc": 70,
+      "todos": 0,
+      "functions": 2,
+      "imports": 4,
+      "maxNesting": 4,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "booking\\ContactForm.tsx",
+      "loc": 126,
+      "todos": 0,
+      "functions": 2,
+      "imports": 7,
+      "maxNesting": 4,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "booking\\ServiceSelector.tsx",
+      "loc": 63,
+      "todos": 0,
+      "functions": 1,
+      "imports": 2,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "booking\\SlotPicker.tsx",
+      "loc": 121,
+      "todos": 1,
+      "functions": 3,
+      "imports": 4,
+      "maxNesting": 5,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "public\\PublicFooter.tsx",
+      "loc": 23,
+      "todos": 0,
+      "functions": 1,
+      "imports": 3,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "public\\PublicHeader.tsx",
+      "loc": 15,
+      "todos": 0,
+      "functions": 1,
+      "imports": 2,
+      "maxNesting": 1,
+      "securityIssues": []
+    }
+  ]
+}

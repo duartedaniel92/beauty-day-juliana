@@ -1,0 +1,183 @@
+{
+  "type": "complexity",
+  "path": "C:\\dev\\portfolio\\beauty-day-juliana\\app",
+  "files": 19,
+  "totalLoc": 503,
+  "totalTodos": 0,
+  "totalFunctions": 19,
+  "totalImports": 79,
+  "avgFileSize": 26,
+  "fileStats": [
+    {
+      "relativePath": "agendar\\loading.tsx",
+      "loc": 3,
+      "todos": 0,
+      "functions": 1,
+      "imports": 0,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "agendar\\page.tsx",
+      "loc": 20,
+      "todos": 0,
+      "functions": 1,
+      "imports": 3,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "auth\\confirm\\page.tsx",
+      "loc": 36,
+      "todos": 0,
+      "functions": 1,
+      "imports": 6,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "error.tsx",
+      "loc": 25,
+      "todos": 0,
+      "functions": 1,
+      "imports": 1,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "layout.tsx",
+      "loc": 26,
+      "todos": 0,
+      "functions": 1,
+      "imports": 3,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "login\\error.tsx",
+      "loc": 4,
+      "todos": 0,
+      "functions": 1,
+      "imports": 0,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "login\\loading.tsx",
+      "loc": 3,
+      "todos": 0,
+      "functions": 1,
+      "imports": 0,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "login\\page.tsx",
+      "loc": 53,
+      "todos": 0,
+      "functions": 1,
+      "imports": 8,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "not-found.tsx",
+      "loc": 17,
+      "todos": 0,
+      "functions": 1,
+      "imports": 1,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "nova-senha\\page.tsx",
+      "loc": 45,
+      "todos": 0,
+      "functions": 1,
+      "imports": 7,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "page.tsx",
+      "loc": 79,
+      "todos": 0,
+      "functions": 1,
+      "imports": 7,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "painel\\configuracoes\\page.tsx",
+      "loc": 7,
+      "todos": 0,
+      "functions": 1,
+      "imports": 3,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "painel\\error.tsx",
+      "loc": 6,
+      "todos": 0,
+      "functions": 1,
+      "imports": 2,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "painel\\layout.tsx",
+      "loc": 20,
+      "todos": 0,
+      "functions": 1,
+      "imports": 7,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "painel\\loading.tsx",
+      "loc": 4,
+      "todos": 0,
+      "functions": 1,
+      "imports": 1,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "painel\\page.tsx",
+      "loc": 15,
+      "todos": 0,
+      "functions": 1,
+      "imports": 7,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "painel\\servicos\\page.tsx",
+      "loc": 16,
+      "todos": 0,
+      "functions": 1,
+      "imports": 6,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "recuperar-senha\\page.tsx",
+      "loc": 41,
+      "todos": 0,
+      "functions": 1,
+      "imports": 6,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "sucesso\\[id]\\page.tsx",
+      "loc": 83,
+      "todos": 0,
+      "functions": 1,
+      "imports": 11,
+      "maxNesting": 2,
+      "securityIssues": []
+    }
+  ]
+}

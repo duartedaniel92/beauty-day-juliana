@@ -1,0 +1,45 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "nonce": true
+  },
+  {
+    "check": "CSRF origem divergente rejeitada",
+    "status": 500
+  },
+  {
+    "path": "/login",
+    "status": 200,
+    "nonce": true
+  },
+  {
+    "path": "/agendar",
+    "status": 200,
+    "nonce": true
+  },
+  {
+    "path": "/privacidade",
+    "status": 200,
+    "nonce": true
+  },
+  {
+    "path": "/painel",
+    "status": 307,
+    "nonce": true
+  },
+  {
+    "path": "/painel/site",
+    "status": 307,
+    "nonce": true
+  },
+  {
+    "path": "/sucesso/11111111-1111-4111-8111-111111111111",
+    "status": 404,
+    "nonce": true
+  },
+  {
+    "check": "nonce distinto por resposta",
+    "passed": true
+  }
+]

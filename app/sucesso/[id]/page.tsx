@@ -5,6 +5,15 @@ import { formatPrice } from "@/lib/format";
 import { formatInTimeZone } from "date-fns-tz";
 import { AddToGoogleCalendar } from "@/components/booking/AddToGoogleCalendar";
 import { SALON_TIMEZONE } from "@/lib/availability/calculate-slots";
+import { z } from "zod";
+import { PublicHeader } from "@/components/public/PublicHeader";
+import { bookingApprovalEnabled } from '@/lib/booking-feature';
+import { bookingStatusLabels, effectiveBookingStatus, type BookingStatus } from '@/lib/booking-status';
+import { cookies } from 'next/headers';
+import { BOOKING_RECEIPT_COOKIE, readBookingReceipts } from '@/lib/security/booking-access';
+
+export const dynamic = 'force-dynamic';
+export const metadata = { robots: { index: false, follow: false } };
 
 export default async function SucessoPage({
   params,
@@ -12,6 +21,9 @@ export default async function SucessoPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  if (!z.uuid().safeParse(id).success) notFound();
+  const store = await cookies();
+  if (!readBookingReceipts(store.get(BOOKING_RECEIPT_COOKIE)?.value).some(entry => entry.id === id)) notFound();
   const supabase = createAdminClient();
 
   const { data: appointment, error } = await supabase
@@ -26,11 +38,18 @@ export default async function SucessoPage({
   // PGRST116 = .single() nao encontrou linha: e um 404 legitimo.
   // Qualquer outro erro e falha de infraestrutura e deve subir pro error boundary.
   if (error && error.code !== "PGRST116") {
-    throw new Error(`Falha ao carregar agendamento: ${error.message}`);
+    throw new Error('Não foi possível carregar a reserva. Tente novamente.');
   }
 
   if (!appointment) {
     notFound();
+  }
+
+  let status: BookingStatus = 'confirmed';
+  if (bookingApprovalEnabled()) {
+    const result = await supabase.from('appointments').select('status,expires_at').eq('id', id).single();
+    if (result.error || !result.data) throw new Error('Não foi possível consultar a situação da reserva.');
+    status = effectiveBookingStatus(result.data.status as BookingStatus, result.data.expires_at);
   }
 
   const totalPriceCents = appointment.appointment_services.reduce(
@@ -42,8 +61,9 @@ export default async function SucessoPage({
     .join(", ");
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 px-6 py-16">
-      <h1 className="font-display text-2xl text-ink">Agendamento confirmado</h1>
+    <div className="booking-surface"><PublicHeader /><main className="mx-auto flex min-h-[75vh] max-w-xl flex-col gap-6 px-6 py-16">
+      <h1 className="font-display text-2xl text-ink">{status === 'confirmed' ? 'Agendamento confirmado' : bookingStatusLabels[status]}</h1>
+      {status === 'pending' && <p>Recebemos seu pedido. Aguarde a autorização da Juliana antes de considerar o horário confirmado.</p>}
       <dl className="flex flex-col gap-1 font-sans text-sm text-ink-soft">
         <div className="flex justify-between gap-4">
           <dt>Serviços</dt>
@@ -64,14 +84,14 @@ export default async function SucessoPage({
           <dd>{formatPrice(totalPriceCents)}</dd>
         </div>
       </dl>
-      <AddToGoogleCalendar
+      {status === 'confirmed' && <AddToGoogleCalendar
         title={`Beauty Day Juliana — ${serviceNames}`}
         startISO={appointment.start_time}
         endISO={appointment.end_time}
-      />
+      />}
       <Link href="/" className="w-fit font-sans text-sm text-ink-soft underline">
         Voltar ao início
       </Link>
-    </main>
+    </main></div>
   );
 }

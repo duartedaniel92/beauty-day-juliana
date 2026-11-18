@@ -1,3 +1,7 @@
+# Documentação do projeto
+
+Leia [regras comuns](../docs/RULES.md) e [regras do projeto](docs/RULES.md) antes de implementar. Consulte também os documentos PRD, ARCHITECTURE, DESIGN, TASKS e MEMORY em `docs/`. Atualize tarefas e memória ao encerrar trabalho relevante; resultados históricos não substituem verificações atuais.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

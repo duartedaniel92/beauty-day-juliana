@@ -1,5 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
+import { addDays, salonDate } from "../lib/calendar";
+import { assertE2EEnvironment } from '../lib/security/e2e-environment';
+
+assertE2EEnvironment();
 
 // Cliente de service role só pra limpeza do agendamento criado pelo teste.
 // Não reaproveita lib/supabase/admin.ts porque aquele arquivo importa
@@ -10,21 +14,6 @@ function createTestCleanupClient() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     { auth: { autoRefreshToken: false, persistSession: false } }
   );
-}
-
-// Proximo dia util do salao a partir de amanha (fechado domingo e segunda,
-// conforme o seed de business_hours). Nunca usa "hoje": alem da folga, no
-// fim do dia a antecedencia minima de 2h pode deixar hoje sem horario.
-function nextWorkingDayISO(): string {
-  const date = new Date();
-  date.setDate(date.getDate() + 1);
-  while (date.getDay() === 0 || date.getDay() === 1) {
-    date.setDate(date.getDate() + 1);
-  }
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
 }
 
 test.describe("fluxo de agendamento", () => {
@@ -55,9 +44,14 @@ test.describe("fluxo de agendamento", () => {
     await page.getByRole("checkbox").first().check();
     await page.getByRole("button", { name: "Continuar" }).click();
 
-    await page.getByLabel("Data").fill(nextWorkingDayISO());
-
     const firstSlotButton = page.getByRole("button", { name: /^\d{2}:\d{2}$/ }).first();
+    // O expediente pode mudar pelo painel. Consulte a disponibilidade real,
+    // usando o fuso do salão, sem presumir os dias definidos no seed.
+    for (let offset = 1; offset <= 14; offset++) {
+      await page.getByLabel("Data").fill(addDays(salonDate(), offset));
+      await expect(firstSlotButton.or(page.getByText("Nenhum horário livre nesse dia. Escolha outra data."))).toBeVisible();
+      if (await firstSlotButton.isVisible()) break;
+    }
     await expect(firstSlotButton).toBeVisible();
     await firstSlotButton.click();
 
@@ -65,7 +59,7 @@ test.describe("fluxo de agendamento", () => {
     await page.getByLabel("Nome completo").fill("Cliente de Teste E2E");
     await page.getByLabel("WhatsApp").fill("(11) 98888-7777");
     await page.getByLabel("E-mail").fill(testEmail);
-    await page.getByRole("button", { name: "Confirmar agendamento" }).click();
+    await page.getByRole("button", { name: "Enviar agendamento" }).click();
 
     await expect(page).toHaveURL(/\/sucesso\/.+/);
     createdAppointmentId = page.url().split("/sucesso/")[1];

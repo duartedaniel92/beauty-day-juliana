@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #211c18;
-  --color-ink-soft: #4a3f37;
-  --color-cream: #f7f1e8;
-  --color-clay: #a6431f;
-  --color-clay-dark: #7a3016;
-  --color-sand: #d8c3a5;
-  --color-gold: #9c7a3c;
+  --color-ink: #171717;
+  --color-ink-soft: #50504b;
+  --color-cream: #ffffff;
+  --color-clay: #202020;
+  --color-clay-dark: #000000;
+  --color-sand: #deded6;
+  --color-gold: #69703b;
 
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-manrope);
   --font-sans: var(--font-manrope);
 }
 
@@ -17,3 +17,120 @@ body {
   background-color: var(--color-cream);
   color: var(--color-ink);
 }
+
+/* O painel herda a identidade compartilhada e ajusta apenas a área operacional. */
+.admin-site {
+  font-variant-numeric: tabular-nums;
+  accent-color: #202020;
+  caret-color: #202020;
+}
+.admin-site aside { background: #f3f4e8; }
+.professional-brand { display: inline-flex; min-height: 44px; flex-direction: column; justify-content: center; gap: 3px; font-family: var(--font-manrope); color: #171717; }
+.professional-brand > span:first-child { font-size: 23px; line-height: 1.15; font-weight: 600; letter-spacing: -.035em; }
+.professional-brand > span:last-child { font-size: 12px; }
+.auth-site { display: flex; flex-direction: column; }
+.auth-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: 100%; max-width: 1240px; margin: auto; padding: 28px clamp(24px, 5vw, 64px); }
+.auth-back { display: inline-flex; min-height: 44px; align-items: center; font-size: 13px; text-decoration: underline; text-underline-offset: 5px; }
+.auth-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(40px, 7vw, 100px); width: 100%; max-width: 1240px; margin: auto; padding: 24px clamp(24px, 5vw, 64px) 64px; }
+.auth-portrait { max-width: 440px; }
+.auth-portrait img { width: 100%; height: auto; max-height: 570px; object-fit: cover; object-position: center 35%; border-radius: 24px; }
+.auth-portrait figcaption { display: flex; justify-content: space-between; gap: 16px; margin-top: 14px; font-size: 13px; }
+.auth-portrait figcaption span { color: var(--color-ink-soft); }
+.auth-form { max-width: 430px; width: 100%; }
+.auth-form h1 { font-size: clamp(32px, 3.5vw, 48px); line-height: 1.12; }
+.auth-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: auto; padding: 24px max(24px, calc((100vw - 1112px) / 2)); background: #f3f4e8; font-size: 12px; }
+@media (max-width: 767px) {
+  .auth-header { padding-block: 20px; }
+  .auth-layout { grid-template-columns: 1fr; gap: 36px; padding-top: 20px; padding-bottom: 36px; }
+  .auth-form { max-width: none; }
+  .auth-portrait { order: 2; max-width: none; }
+  .auth-portrait img { max-height: 320px; object-position: center 25%; }
+}
+.admin-site h1, .admin-site h2 { font-weight: 600; letter-spacing: -.025em; text-wrap: balance; }
+.admin-site .admin-control { transition: background-color .15s, border-color .15s; }
+.admin-site .admin-control:hover:not(:disabled) { border-color: var(--color-ink); }
+.admin-site dialog { background: white; box-shadow: 0 20px 70px #0003; }
+.admin-site ::selection { background: #e7eacb; color: #171717; }
+.admin-status { width: fit-content; border-radius: 100px; padding: 6px 12px; background: #eeeeea; font-size: 12px; font-weight: 600; }
+.admin-status[data-status="pending"] { background: #f5edc6; color: #5b4600; }
+.admin-status[data-status="confirmed"] { background: #e7edda; color: #324517; }
+.admin-status[data-status="cancelled"], .admin-status[data-status="rejected"] { background: #f8e4df; color: #7b2920; }
+
+
+/* A referência Canva é compartilhada por apresentação, reserva e painel. */
+:root { color-scheme: light; }
+button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled), a { touch-action: manipulation; }
+:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 4px; }
+::selection { background: #e7eacb; color: #171717; }
+.public-site { max-width: 1366px; margin: auto; background: white; overflow-wrap: anywhere; }
+.public-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; max-width: 1366px; margin: auto; padding: 20px clamp(20px, 4vw, 56px); }
+.public-brand { display: inline-flex; font-family: var(--font-brand), sans-serif; font-size: 28px; font-weight: 700; line-height: 1.1; text-transform: uppercase; }
+.public-brand-name { display: block; font-family: var(--font-manrope); font-size: 12px; font-weight: 400; text-align: center; text-transform: none; margin-top: 5px; }
+.public-professional-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; text-decoration: underline; text-underline-offset: 4px; }
+.public-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 32px; border-radius: 999px; background: #171717; color: white; font-size: 14px; font-weight: 500; transition: background-color .15s; }
+.public-cta:hover { background: #393939; }
+.canva-hero { padding: 8px clamp(20px, 4vw, 56px) 40px; text-align: center; }
+.canva-hero h1 { font: 700 clamp(48px, 10vw, 136px)/1.05 var(--font-brand), sans-serif; letter-spacing: -.035em; text-transform: uppercase; }
+.canva-subtitle { font-size: clamp(20px, 3vw, 32px); margin: 8px 0 24px; }
+.canva-banner { position: relative; aspect-ratio: 10/3; border-radius: 28px; overflow: hidden; margin-bottom: 24px; }
+.canva-banner img { object-position: center 47%; }
+.canva-about { display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; gap: 64px; padding: 80px clamp(20px, 4vw, 56px); }
+.canva-about h2 { font-size: 16px; margin-bottom: 24px; }
+.canva-about p { font-size: clamp(28px, 4vw, 54px); line-height: 1.15; letter-spacing: -.035em; max-width: 20ch; }
+.canva-about .public-cta { margin-top: 48px; }
+.canva-portrait img { width: 100%; height: auto; max-height: 640px; object-fit: cover; object-position: center 30%; border-radius: 28px; }
+.atelier-results, .atelier-services, .atelier-testimonial, .atelier-contact { padding: 64px clamp(20px, 4vw, 56px); }
+.atelier-results h2, .atelier-services h2, .atelier-contact h2 { font-size: clamp(30px, 4vw, 52px); font-weight: 500; line-height: 1.15; letter-spacing: -.025em; text-wrap: balance; }
+.atelier-specialties { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 32px; margin-top: 40px; }
+.atelier-specialties dt { font-weight: 700; font-size: 17px; }
+.atelier-specialties dd { margin-top: 12px; line-height: 1.6; font-size: 14px; color: var(--color-ink-soft); }
+.canva-work-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px; }
+.canva-work-photos img { width: 100%; height: 440px; object-fit: cover; object-position: center 35%; border-radius: 24px; }
+.atelier-services { scroll-margin-top: 24px; }
+.atelier-services li { font-variant-numeric: tabular-nums; }
+.atelier-testimonial { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; }
+.atelier-testimonial h2 { font-size: 16px; }
+.atelier-testimonial blockquote { font-size: clamp(28px, 4vw, 48px); line-height: 1.2; letter-spacing: -.025em; }
+.atelier-testimonial-detail { margin-block: 24px; line-height: 1.7; max-width: 60ch; }
+.atelier-testimonial figcaption { font-weight: 700; }
+.atelier-contact { display: grid; grid-template-columns: 1fr 1.25fr; gap: 64px; padding-bottom: 88px; }
+.canva-contact-form { display: flex; flex-direction: column; gap: 20px; }
+.canva-contact-form label { display: grid; gap: 8px; font-size: 14px; }
+.canva-contact-form input, .canva-contact-form textarea { width: 100%; min-width: 0; min-height: 48px; border: 1px solid #555; border-radius: 12px; padding: 12px; font-size: 16px; }
+.canva-service-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 32px; margin-top: 40px; }
+.canva-service-grid li { min-width: 0; overflow-wrap: anywhere; }
+.atelier-contact p { font-size: 20px; line-height: 1.6; margin: 24px 0 32px; }
+.atelier-contact h2 { font-size: 16px; letter-spacing: 0; }
+.atelier-contact > div > p { font-size: clamp(28px, 4vw, 48px); line-height: 1.2; letter-spacing: -.025em; }
+.atelier-contact .canva-contact-form p { font-size: 14px; line-height: 1.5; margin: 0; }
+.canva-footer-image { position: relative; height: clamp(200px, 32vw, 430px); }
+.canva-footer-image img { object-position: center 50%; }
+.public-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 32px; padding: 48px clamp(20px,4vw,56px); background: #f3f4e8; }
+.public-footer .public-brand { font-size: clamp(32px,4vw,56px); }
+.public-footer a { display: inline-flex; min-height: 44px; align-items: center; overflow-wrap: anywhere; text-decoration: underline; text-underline-offset: 4px; }
+.booking-surface { min-height: 100vh; background: white; }
+.booking-surface h1 { font-weight: 500; font-size: clamp(28px,4vw,36px); letter-spacing: -.025em; }
+.booking-surface button { min-height: 44px; }
+.booking-surface button.bg-clay, .booking-surface a.bg-clay { border-radius: 999px; }
+.booking-surface input:not([type=checkbox]) { border-radius: 12px; min-height: 48px; font-size: 16px; }
+@media (max-width: 767px) {
+  .public-header { padding-block: 12px; }
+  .public-brand { font-size: 23px; }
+  .canva-hero { padding-top: 24px; }
+  .canva-banner { aspect-ratio: 4/3; border-radius: 20px; }
+  .canva-about { grid-template-columns: 1fr; gap: 32px; padding-block: 40px; }
+  .canva-about p { max-width: 24ch; }
+  .canva-about .public-cta { margin-top: 28px; }
+  .canva-portrait img { max-height: 480px; }
+  .atelier-results, .atelier-services, .atelier-testimonial, .atelier-contact { padding-block: 40px; }
+  .atelier-specialties { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
+  .canva-work-photos { gap: 16px; }
+  .canva-work-photos img { height: 280px; border-radius: 16px; }
+  .atelier-testimonial { grid-template-columns: 1fr; gap: 24px; }
+  .atelier-contact { grid-template-columns: 1fr; gap: 40px; }
+  .canva-service-grid { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
+  .public-footer { align-items: flex-start; }
+}
+@media (max-width: 380px) { .canva-hero h1 { font-size: 44px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

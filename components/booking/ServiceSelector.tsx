@@ -6,6 +6,7 @@ import type { WizardService } from "./BookingWizard";
 interface ServiceSelectorProps {
   services: WizardService[];
   selectedServiceIds: string[];
+  totalDurationMinutes: number;
   onToggle: (serviceId: string) => void;
   onContinue: () => void;
 }
@@ -13,13 +14,11 @@ interface ServiceSelectorProps {
 export function ServiceSelector({
   services,
   selectedServiceIds,
+  totalDurationMinutes,
   onToggle,
   onContinue,
 }: ServiceSelectorProps) {
   const canContinue = selectedServiceIds.length > 0;
-  const totalDurationMinutes = services
-    .filter((service) => selectedServiceIds.includes(service.id))
-    .reduce((sum, service) => sum + service.duration_minutes, 0);
 
   return (
     <div className="flex flex-col gap-6">

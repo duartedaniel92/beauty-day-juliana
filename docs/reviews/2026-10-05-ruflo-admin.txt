@@ -1,0 +1,123 @@
+
+Code Analysis
+--------------------------------------------------
+{
+  "type": "security",
+  "path": "C:\\dev\\portfolio\\beauty-day-juliana\\components\\admin",
+  "files": 12,
+  "totalLoc": 295,
+  "totalTodos": 0,
+  "totalFunctions": 19,
+  "totalImports": 54,
+  "avgFileSize": 25,
+  "fileStats": [
+    {
+      "relativePath": "AdminNav.tsx",
+      "loc": 12,
+      "todos": 0,
+      "functions": 1,
+      "imports": 4,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "BlockForm.tsx",
+      "loc": 40,
+      "todos": 0,
+      "functions": 2,
+      "imports": 6,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "BookingDecisionForm.tsx",
+      "loc": 44,
+      "todos": 0,
+      "functions": 2,
+      "imports": 6,
+      "maxNesting": 4,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "BusinessHoursForm.tsx",
+      "loc": 23,
+      "todos": 0,
+      "functions": 2,
+      "imports": 5,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "Calendar.tsx",
+      "loc": 40,
+      "todos": 0,
+      "functions": 4,
+      "imports": 5,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "CalendarToolbar.tsx",
+      "loc": 10,
+      "todos": 0,
+      "functions": 1,
+      "imports": 4,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "Dialog.tsx",
+      "loc": 28,
+      "todos": 0,
+      "functions": 1,
+      "imports": 2,
+      "maxNesting": 5,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "EntryDetails.tsx",
+      "loc": 27,
+      "todos": 0,
+      "functions": 1,
+      "imports": 9,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "ServiceForm.tsx",
+      "loc": 34,
+      "todos": 0,
+      "functions": 2,
+      "imports": 6,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "ServiceStatus.tsx",
+      "loc": 11,
+      "todos": 0,
+      "functions": 1,
+      "imports": 4,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "styles.ts",
+      "loc": 3,
+      "todos": 0,
+      "functions": 0,
+      "imports": 0,
+      "maxNesting": 0,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "useMutation.ts",
+      "loc": 23,
+      "todos": 0,
+      "functions": 2,
+      "imports": 3,
+      "maxNesting": 4,
+      "securityIssues": []
+    }
+  ]
+}

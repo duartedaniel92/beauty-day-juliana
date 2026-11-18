@@ -1,0 +1,84 @@
+{
+  "at": "2026-10-08T03:51:09.193Z",
+  "deployment": "dpl_3DKWdU3HYB6ifYfXVgRUWPnc9yNS",
+  "base": "https://beauty-day-juliana.vercel.app",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "expected": 200,
+      "pass": true,
+      "csp": true,
+      "hsts": true,
+      "nonceMatches": true,
+      "privateNoStore": null,
+      "bookingCookie": null
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "expected": 200,
+      "pass": true,
+      "csp": true,
+      "hsts": true,
+      "nonceMatches": true,
+      "privateNoStore": null,
+      "bookingCookie": null
+    },
+    {
+      "path": "/agendar",
+      "status": 200,
+      "expected": 200,
+      "pass": true,
+      "csp": true,
+      "hsts": true,
+      "nonceMatches": true,
+      "privateNoStore": null,
+      "bookingCookie": true
+    },
+    {
+      "path": "/privacidade",
+      "status": 200,
+      "expected": 200,
+      "pass": true,
+      "csp": true,
+      "hsts": true,
+      "nonceMatches": true,
+      "privateNoStore": null,
+      "bookingCookie": null
+    },
+    {
+      "path": "/painel",
+      "status": 307,
+      "expected": 307,
+      "pass": true,
+      "csp": true,
+      "hsts": true,
+      "nonceMatches": null,
+      "privateNoStore": true,
+      "bookingCookie": null
+    },
+    {
+      "path": "/painel/site",
+      "status": 307,
+      "expected": 307,
+      "pass": true,
+      "csp": true,
+      "hsts": true,
+      "nonceMatches": null,
+      "privateNoStore": true,
+      "bookingCookie": null
+    },
+    {
+      "path": "/sucesso/00000000-0000-4000-8000-000000000000",
+      "status": 404,
+      "expected": 404,
+      "pass": true,
+      "csp": true,
+      "hsts": true,
+      "nonceMatches": null,
+      "privateNoStore": null,
+      "bookingCookie": null
+    }
+  ]
+}

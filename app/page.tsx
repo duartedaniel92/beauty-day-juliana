@@ -1,108 +1,42 @@
-import Image from "next/image";
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
-import { formatPrice } from "@/lib/format";
-
-interface ServiceTeaser {
-  id: string;
-  name: string;
-  price_cents: number;
-  duration_minutes: number;
-}
+import Image from 'next/image'
+import Link from 'next/link'
+import { getPublicServices } from '@/lib/public-services'
+import { getSiteContent, getServiceMedia } from '@/lib/site-data'
+import { imageUrl } from '@/lib/site-content'
+import { publicEnv } from '@/lib/env'
+import { formatPrice } from '@/lib/format'
+import { PublicHeader } from '@/components/public/PublicHeader'
+import { PublicFooter } from '@/components/public/PublicFooter'
+import { ContactForm } from '@/components/public/ContactForm'
 
 export default async function HomePage() {
-  const supabase = await createClient();
-  const { data: services, error } = await supabase
-    .from("services")
-    .select("id, name, price_cents, duration_minutes")
-    .eq("active", true)
-    .order("duration_minutes", { ascending: true });
-
-  if (error) {
-    throw new Error(`Falha ao carregar servicos: ${error.message}`);
-  }
-
-  const featuredServices = (services ?? []) as ServiceTeaser[];
-
-  return (
-    <>
-      <main>
-        <section className="bg-ink text-cream">
-        <div className="mx-auto flex max-w-5xl flex-col gap-10 px-6 py-10 md:flex-row md:items-center md:py-24">
-          <div className="relative h-[40vh] w-full max-w-sm overflow-hidden rounded-sm md:aspect-[3/4] md:h-auto md:w-2/5">
-            <Image
-              src="/images/Juliana_2.jpg"
-              alt="Juliana, profissional do Beauty Day"
-              fill
-              priority
-              className="object-cover"
-              sizes="(min-width: 768px) 40vw, 90vw"
-            />
-          </div>
-          <div className="flex flex-col gap-6 md:w-3/5">
-            <p className="font-sans text-sm text-sand">Beauty Day Juliana</p>
-            <h1 className="font-display text-4xl leading-tight md:text-5xl">
-              Beleza é ter um horário guardado só pra você.
-            </h1>
-            <p className="max-w-md font-sans text-base leading-relaxed text-sand">
-              Corte, coloração, escova. Escolha o serviço, veja o horário livre
-              e confirme — sem trocar mensagem no WhatsApp.
-            </p>
-            <Link
-              href="/agendar"
-              className="w-fit rounded-sm bg-clay px-6 py-3 font-sans text-sm font-medium text-cream transition-colors hover:bg-clay-dark"
-            >
-              Agendar meu horário
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-3xl px-6 py-16">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-          <div className="relative aspect-square w-24 shrink-0 overflow-hidden rounded-full">
-            <Image
-              src="/images/Juliana_1.jpg"
-              alt="Juliana no dia a dia do salão"
-              fill
-              className="object-cover"
-              sizes="96px"
-            />
-          </div>
-          <p className="font-sans text-ink-soft">
-            Sou a Juliana — atendo sozinha, com hora marcada, pra dar atenção
-            de verdade a cada cliente.
-          </p>
-        </div>
-      </section>
-
-      {featuredServices.length > 0 && (
-        <section className="mx-auto max-w-3xl px-6 pb-16">
-          <h2 className="font-display text-2xl text-ink">Serviços</h2>
-          <ul className="mt-6 divide-y divide-sand/60 border-y border-sand/60">
-            {featuredServices.map((service) => (
-              <li
-                key={service.id}
-                className="flex items-baseline justify-between gap-4 py-4 font-sans"
-              >
-                <span className="text-ink">{service.name}</span>
-                <span className="whitespace-nowrap text-sm text-ink-soft">
-                  {formatPrice(service.price_cents)} · {service.duration_minutes} min
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-      </main>
-
-      <footer className="border-t border-sand/60 px-6 py-10">
-        <div className="mx-auto flex max-w-3xl flex-col gap-2 font-sans text-sm text-ink-soft">
-          <p className="text-ink">Beauty Day Juliana</p>
-          <p>WhatsApp: (11) 90000-0000</p>
-          <p>Instagram: @beautydayjuliana</p>
-        </div>
-      </footer>
-    </>
-  );
+  const [{ content }, services, media] = await Promise.all([getSiteContent(), getPublicServices(), getServiceMedia()])
+  const origin = publicEnv().NEXT_PUBLIC_SUPABASE_URL
+  return <div className="public-site"><PublicHeader /><main>
+    <section className="canva-hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">{content.heroTitle}</h1><p className="canva-subtitle">{content.subtitle}</p>
+      <div className="canva-banner"><Image src={imageUrl(content.heroImage.path, origin)} alt={content.heroImage.alt} fill preload sizes="(min-width: 1280px) 1184px, 92vw" className="object-cover" /></div>
+      <Link href="/agendar" className="public-cta">Agendar horário</Link>
+    </section>
+    <section className="canva-about" aria-labelledby="about-title"><div>
+      <h2 id="about-title">{content.aboutTitle}</h2><p className="whitespace-pre-line">{content.aboutText}</p>
+      <a href="#servicos" className="public-cta">Veja meu trabalho</a>
+    </div><div className="canva-portrait"><Image src={imageUrl(content.aboutImage.path, origin)} alt={content.aboutImage.alt} width={533} height={800} sizes="(min-width: 768px) 40vw, 90vw" /></div></section>
+    <section className="atelier-results" aria-labelledby="results-title"><h2 id="results-title">{content.resultsTitle}</h2>
+      <div className="canva-work-photos">{content.gallery.map((image,index) => <Image key={`${image.path}-${index}`} src={imageUrl(image.path, origin)} alt={image.alt} width={533} height={800} sizes="(min-width: 768px) 45vw, 90vw" />)}</div>
+    </section>
+    <section id="servicos" className="atelier-services" aria-labelledby="services-title"><h2 id="services-title">{content.servicesTitle}</h2>
+      {services.length ? <ul className="canva-service-grid">{services.map(service => {
+        const photo = media.find(image => image.service_id === service.id)
+        return <li key={service.id}>
+          {photo && <Image src={imageUrl(photo.path, origin)} alt={photo.alt} width={533} height={400} sizes="(min-width: 768px) 22vw, 90vw" className="mb-5 aspect-[4/3] w-full rounded-2xl object-cover" />}
+          <h3 className="text-lg font-semibold">{service.name}</h3>{service.description && <p className="mt-3 text-sm leading-relaxed text-ink-soft">{service.description}</p>}
+          <p className="mt-4 text-sm tabular-nums">{formatPrice(service.price_cents)} · {service.duration_minutes} min</p>
+        </li>
+      })}</ul> : <p className="mt-6 text-ink-soft">Nenhum serviço disponível no momento. Volte mais tarde.</p>}
+      {services.length > 0 && <Link href="/agendar" className="public-cta mt-8">Escolher serviços e horário</Link>}
+    </section>
+    <section className="atelier-contact" aria-labelledby="contact-title"><ContactForm whatsapp={content.whatsapp} /><div><h2 id="contact-title">{content.contactTitle}</h2><p>{content.contactText}</p><Link href="/agendar" className="public-cta">Escolher meu horário</Link></div></section>
+    <div className="canva-footer-image" aria-hidden="true"><Image src={imageUrl(content.footerImage.path, origin)} alt="" fill sizes="100vw" className="object-cover" /></div>
+  </main><PublicFooter content={content} /></div>
 }

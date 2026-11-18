@@ -1,0 +1,323 @@
+
+Code Analysis
+--------------------------------------------------
+{
+  "type": "quality",
+  "path": "C:\\dev\\portfolio\\beauty-day-juliana\\lib",
+  "files": 34,
+  "totalLoc": 1739,
+  "totalTodos": 0,
+  "totalFunctions": 54,
+  "totalImports": 88,
+  "avgFileSize": 51,
+  "fileStats": [
+    {
+      "relativePath": "actions\\admin.test.ts",
+      "loc": 23,
+      "todos": 0,
+      "functions": 0,
+      "imports": 2,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "actions\\admin.ts",
+      "loc": 86,
+      "todos": 0,
+      "functions": 9,
+      "imports": 6,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "actions\\auth.ts",
+      "loc": 40,
+      "todos": 0,
+      "functions": 2,
+      "imports": 4,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "actions\\booking-mappers.test.ts",
+      "loc": 40,
+      "todos": 0,
+      "functions": 0,
+      "imports": 2,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "actions\\booking-mappers.ts",
+      "loc": 51,
+      "todos": 0,
+      "functions": 3,
+      "imports": 1,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "actions\\bookings.ts",
+      "loc": 82,
+      "todos": 0,
+      "functions": 3,
+      "imports": 6,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "actions\\password-recovery.ts",
+      "loc": 95,
+      "todos": 0,
+      "functions": 6,
+      "imports": 5,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin-navigation.test.ts",
+      "loc": 17,
+      "todos": 0,
+      "functions": 0,
+      "imports": 2,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin-navigation.ts",
+      "loc": 10,
+      "todos": 0,
+      "functions": 1,
+      "imports": 1,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "admin-types.ts",
+      "loc": 8,
+      "todos": 0,
+      "functions": 0,
+      "imports": 1,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "auth\\actions.test.ts",
+      "loc": 61,
+      "todos": 0,
+      "functions": 1,
+      "imports": 3,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "auth\\owner-membership.ts",
+      "loc": 14,
+      "todos": 0,
+      "functions": 1,
+      "imports": 2,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "auth\\password-recovery.test.ts",
+      "loc": 124,
+      "todos": 0,
+      "functions": 1,
+      "imports": 2,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "auth\\proxy.test.ts",
+      "loc": 50,
+      "todos": 0,
+      "functions": 0,
+      "imports": 6,
+      "maxNesting": 5,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "auth\\require-owner.test.ts",
+      "loc": 50,
+      "todos": 0,
+      "functions": 0,
+      "imports": 2,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "auth\\require-owner.ts",
+      "loc": 19,
+      "todos": 0,
+      "functions": 1,
+      "imports": 4,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "availability\\calculate-slots.test.ts",
+      "loc": 121,
+      "todos": 0,
+      "functions": 0,
+      "imports": 2,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "availability\\calculate-slots.ts",
+      "loc": 57,
+      "todos": 0,
+      "functions": 2,
+      "imports": 1,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "calendar.test.ts",
+      "loc": 34,
+      "todos": 0,
+      "functions": 0,
+      "imports": 2,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "calendar.ts",
+      "loc": 70,
+      "todos": 0,
+      "functions": 11,
+      "imports": 2,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "contact.test.ts",
+      "loc": 28,
+      "todos": 0,
+      "functions": 0,
+      "imports": 2,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "contact.ts",
+      "loc": 37,
+      "todos": 0,
+      "functions": 2,
+      "imports": 1,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "database\\booking.integration.test.ts",
+      "loc": 69,
+      "todos": 0,
+      "functions": 4,
+      "imports": 5,
+      "maxNesting": 3,
+      "securityIssues": [
+        "exec()"
+      ]
+    },
+    {
+      "relativePath": "env.ts",
+      "loc": 18,
+      "todos": 0,
+      "functions": 2,
+      "imports": 1,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "format.ts",
+      "loc": 6,
+      "todos": 0,
+      "functions": 1,
+      "imports": 0,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "supabase\\admin.ts",
+      "loc": 17,
+      "todos": 0,
+      "functions": 1,
+      "imports": 5,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "supabase\\client.ts",
+      "loc": 11,
+      "todos": 0,
+      "functions": 1,
+      "imports": 4,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "supabase\\database.types.ts",
+      "loc": 294,
+      "todos": 0,
+      "functions": 0,
+      "imports": 0,
+      "maxNesting": 5,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "supabase\\proxy.ts",
+      "loc": 36,
+      "todos": 0,
+      "functions": 1,
+      "imports": 3,
+      "maxNesting": 5,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "supabase\\server.ts",
+      "loc": 28,
+      "todos": 0,
+      "functions": 1,
+      "imports": 5,
+      "maxNesting": 5,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "validation\\admin.test.ts",
+      "loc": 21,
+      "todos": 0,
+      "functions": 0,
+      "imports": 2,
+      "maxNesting": 2,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "validation\\admin.ts",
+      "loc": 25,
+      "todos": 0,
+      "functions": 0,
+      "imports": 1,
+      "maxNesting": 1,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "validation\\booking.test.ts",
+      "loc": 73,
+      "todos": 0,
+      "functions": 0,
+      "imports": 2,
+      "maxNesting": 3,
+      "securityIssues": []
+    },
+    {
+      "relativePath": "validation\\booking.ts",
+      "loc": 24,
+      "todos": 0,
+      "functions": 0,
+      "imports": 1,
+      "maxNesting": 1,
+      "securityIssues": []
+    }
+  ]
+}

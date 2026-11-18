@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     // Worktrees aninhados do Claude Code (.claude/worktrees/**) ficam
     // dentro do proprio repo e nao devem ser lintados por daqui.
     ".claude/**",
+    ".claude-flow/**",
+    ".vercel/**",
   ]),
 ]);
 

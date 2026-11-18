@@ -44,8 +44,9 @@ export function SlotPicker({
   const [dateISO, setDateISO] = useState(() => todayISO());
   const [result, setResult] = useState<SlotsResult | null>(null);
   const [error, setError] = useState<SlotsError | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
-  const key = requestKey(serviceIds, dateISO);
+  const key = `${requestKey(serviceIds, dateISO)}|${attempt}`;
 
   // O efeito so dispara a busca; todo setState acontece dentro da promise,
   // nunca de forma sincrona no corpo do efeito (regra react-hooks/set-state-in-effect).
@@ -54,7 +55,7 @@ export function SlotPicker({
   useEffect(() => {
     if (!dateISO) return;
     let cancelled = false;
-    const currentKey = requestKey(serviceIds, dateISO);
+    const currentKey = `${requestKey(serviceIds, dateISO)}|${attempt}`;
 
     getAvailableSlots({ serviceIds, dateISO })
       .then((slots) => {
@@ -78,7 +79,7 @@ export function SlotPicker({
     return () => {
       cancelled = true;
     };
-  }, [serviceIds, dateISO]);
+  }, [serviceIds, dateISO, attempt]);
 
   const slots = result?.key === key ? result.slots : null;
   const errorMessage = slots === null && error?.key === key ? error.message : null;
@@ -97,7 +98,7 @@ export function SlotPicker({
           type="date"
           min={todayISO()}
           value={dateISO}
-          onChange={(event) => setDateISO(event.target.value)}
+          onChange={(event) => { setDateISO(event.target.value); setAttempt(current => current + 1); }}
           className="rounded-sm border border-ink-soft/60 bg-cream px-3 py-2 text-ink outline-none focus-visible:border-clay focus-visible:ring-2 focus-visible:ring-clay/40"
         />
       </label>
@@ -107,7 +108,7 @@ export function SlotPicker({
       )}
 
       {errorMessage && (
-        <p className="font-sans text-sm text-clay">{errorMessage}</p>
+        <div role="alert"><p className="font-sans text-sm text-clay">{errorMessage}</p><button type="button" onClick={() => setAttempt(current => current + 1)} className="mt-3 min-h-11 underline">Tentar novamente</button></div>
       )}
 
       {slots !== null && slots.length === 0 && (
@@ -123,7 +124,7 @@ export function SlotPicker({
               <button
                 type="button"
                 onClick={() => onSelect(slot)}
-                className="w-full rounded-sm border border-sand px-3 py-2 font-sans text-sm text-ink transition-colors hover:border-clay hover:text-clay"
+                className="min-h-11 w-full rounded-sm border border-ink-soft/60 px-3 py-2 font-sans text-sm text-ink transition-colors hover:border-clay hover:text-clay"
               >
                 {formatInTimeZone(new Date(slot.start), SALON_TIMEZONE, "HH:mm")}
               </button>

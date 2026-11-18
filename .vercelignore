@@ -1,0 +1,9 @@
+.env*
+.claude
+.claude-flow
+.superpowers
+test-results
+playwright-report
+coverage
+docs
+e2e
