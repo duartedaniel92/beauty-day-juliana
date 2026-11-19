@@ -4,6 +4,7 @@ vi.mock('../auth/require-owner', () => ({ requireOwner: mocks.owner }))
 vi.mock('../supabase/admin', () => ({ createAdminClient: () => ({ rpc: mocks.rpc }) }))
 vi.mock('../booking-feature', () => ({ bookingApprovalEnabled: () => true }))
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
+import { revalidatePath } from 'next/cache'
 import { decideBooking } from './admin'
 const id = '33333333-3333-4333-8333-333333333333'
 describe('decisões protegidas no servidor', () => {
@@ -21,6 +22,10 @@ describe('decisões protegidas no servidor', () => {
     expect(await decideBooking({ id, version: 0, action: 'cancel' })).toHaveProperty('error')
     expect(await decideBooking({ id, version: 0, action: 'reschedule', startTime: '2030-10-08T12:00:00Z' })).toHaveProperty('error')
     expect(mocks.rpc).not.toHaveBeenCalled()
+  })
+  it('não recarrega o painel aberto: o diálogo precisa continuar com o aviso à cliente', async () => {
+    await decideBooking({ id, version: 0, action: 'approve' })
+    expect(revalidatePath).not.toHaveBeenCalled()
   })
   it('traduz colisão sem expor mensagem do banco', async () => {
     mocks.rpc.mockResolvedValue({ error: { code: '23P01', message: 'private SQL detail' } })

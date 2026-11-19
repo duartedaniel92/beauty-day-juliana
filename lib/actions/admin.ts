@@ -44,8 +44,8 @@ export async function decideBooking(input: unknown): Promise<ActionResult> {
     p_actor: owner.id, p_start_time: value.startTime, p_reason: value.reason,
   })
   if (error) return { error: error.code === '23P01' ? 'Esse horário está ocupado. Escolha outro.' : error.code === '40001' ? 'A reserva mudou ou o prazo encerrou. Atualize a agenda.' : 'Não foi possível alterar a reserva. Confira o expediente e o horário.' }
-  invalidate()
-  revalidatePath(`/sucesso/${value.id}`)
+  // Sem revalidatePath: as páginas são dinâmicas (connection() no layout), e qualquer revalidação recarregaria
+  // o painel com o diálogo aberto, fechando-o antes do aviso à cliente. O painel recarrega ao fechar o diálogo.
   return { success: true }
 }
 

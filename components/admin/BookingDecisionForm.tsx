@@ -3,12 +3,13 @@ import { useId, useState, type FormEvent } from 'react'
 import type { AgendaEntry } from '@/lib/admin-types'
 import { decideBooking } from '@/lib/actions/admin'
 import { localDateTimeToISO, salonDate, salonTime } from '@/lib/calendar'
+import { decidedBooking, type BookingDecision } from '@/lib/booking-status'
 import { control, field, primary } from './styles'
 import { useMutation } from './useMutation'
 
-export function BookingDecisionForm({ entry }: { entry: AgendaEntry }) {
+export function BookingDecisionForm({ entry, onDecided }: { entry: AgendaEntry; onDecided: (decided: ReturnType<typeof decidedBooking>) => void }) {
   const id = useId()
-  const [action, setAction] = useState<'approve' | 'reschedule' | 'cancel' | 'reject' | null>(null)
+  const [action, setAction] = useState<BookingDecision | null>(null)
   const [error, setError] = useState('')
   const mutation = useMutation()
   if (entry.version === undefined || !['pending', 'confirmed'].includes(entry.status ?? '')) return null
@@ -20,7 +21,7 @@ export function BookingDecisionForm({ entry }: { entry: AgendaEntry }) {
       const startTime = action === 'reschedule' ? localDateTimeToISO(String(data.get('start'))) : undefined
       mutation.run(() => decideBooking({ id: entry.id, version: entry.version, action, startTime,
         agreedWithClient: data.get('agreed') === 'on', reason: String(data.get('reason') ?? '') }),
-      'Reserva atualizada. Use “Avisar cliente no WhatsApp” para enviar a mensagem.', () => setAction(null))
+      'Reserva atualizada. Use “Avisar cliente no WhatsApp” para enviar a mensagem.', () => { setAction(null); if (action) onDecided(decidedBooking(entry, action, startTime)) }, false)
     } catch { setError('Informe uma data e um horário válidos.') }
   }
   return <section className="space-y-4 border-t border-sand pt-5" aria-label="Decidir sobre a reserva">
