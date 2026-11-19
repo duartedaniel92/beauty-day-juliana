@@ -32,6 +32,10 @@ Escova + corte somam 85 min. O último horário oferecido é 16:30, porque o ate
 - Cadastra serviços, preços, duração e horário de atendimento.
 - Edita os textos e as fotos do site sem mexer em código.
 
+![Painel: login, agenda, autorização de um pedido e botão de aviso no WhatsApp](docs/images/painel-demo.gif)
+
+Gravado num projeto Supabase separado, só com dados fictícios; o tempo de carregamento foi cortado.
+
 ## Stack
 
 | Camada | Tecnologia |
