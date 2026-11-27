@@ -63,6 +63,7 @@ Gravado num projeto Supabase separado, só com dados fictícios; o tempo de carr
 npm test -- --maxWorkers=1   # unitários + transações no PostgreSQL em memória (PGlite)
 npm run lint
 npm run build
+npx playwright install chromium --only-shell   # só na primeira vez
 npm run test:e2e             # Playwright; escrita só em ambiente de homologação
 ```
 
@@ -70,13 +71,22 @@ Os testes cobrem cálculo de horários livres, validação, autorização, confl
 
 ## Rodar localmente
 
+Requisitos: Node.js 22+ e um projeto Supabase (o gratuito serve). Sem as chaves do Supabase no `.env.local`, todas as páginas respondem erro 500.
+
 ```bash
 npm ci
-cp .env.example .env.local   # preencher com as chaves do seu projeto Supabase
-npm run dev
+cp .env.example .env.local   # preencher NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY e SUPABASE_SERVICE_ROLE_KEY
+npm run dev                  # http://localhost:3000
 ```
 
-A ordem das migrations e a criação da conta da proprietária têm detalhes importantes: veja o [guia de desenvolvimento](docs/DESENVOLVIMENTO.md).
+Antes do primeiro `npm run dev`, prepare o banco:
+
+1. Aplique `supabase/migrations/0001_initial_schema.sql` e `0002_seed_services.sql`.
+2. Crie **uma** conta confirmada em Supabase → Authentication. Ela será a proprietária.
+3. Aplique as migrations restantes em ordem de nome. A `20260917030419_owner_and_atomic_booking.sql` vincula aquela conta ao painel e recusa o ambiente se houver zero ou mais de uma conta.
+4. Entre em `/login` com essa conta e cadastre os serviços em `/painel/servicos`.
+
+Detalhes (reset de banco, recuperação de senha, publicação na Vercel) estão no [guia de desenvolvimento](docs/DESENVOLVIMENTO.md).
 
 ## Próximos passos
 
